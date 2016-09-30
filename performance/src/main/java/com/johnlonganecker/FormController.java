@@ -13,14 +13,14 @@ import org.springframework.stereotype.Controller;
 //import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Arrays;
-
-import com.google.gson.Gson;
 
 @Controller
 //@RequestMapping("/perf")
@@ -30,14 +30,17 @@ public class FormController {
 
   private static final Map<String, Object> results = new HashMap<String, Object>();
 
-  //@RequestMapping(method=RequestMethod.POST)
-  @PostMapping("/perf")
-  public @ResponseBody PerfResult process(@RequestParam(value="name", required=false, defaultValue="Stranger") String name) {
+  @PostMapping("/perftest")
+  public @ResponseBody PerfResult process(@RequestBody String scenarioConfig) {
 
     List<Map> scenariosJSON = null;
     String returnResult = "";
     try {
-      scenariosJSON = (List<Map>) new JSONReader().read("[{ 'name': 'consume', 'type': 'simple', 'uri': 'amqp://296d03f3-539b-467c-afd6-f510a7528827:e5d03acnkou3l0tga785btnc4n@rabbitmq-sb.svc.asv.ice.gecis.io:5672/b4a6d819-60fc-400a-8586-243b24de0eba', 'params': [{ 'time-limit': 10, 'producer-count': 4, 'consumer-count': 2, 'queue-name': 'queue_name2' }] }]");
+      System.out.println(scenarioConfig);
+      scenariosJSON = (List<Map>) new JSONReader().read(scenarioConfig);
+      //scenariosJSON = (List<Map>) new JSONReader().read("[ {'name':      'no-ack', 'uri': 'amqp://296d03f3-539b-467c-afd6-f510a7528827:e5d03acnkou3l0tga785btnc4n@rabbitmq-sb.svc.asv.ice.gecis.io:5672/b4a6d819-60fc-400a-8586-243b24de0eba', 'type':      'simple', 'params':    [{'time-limit':     30}]}, {'name':      'message-sizes-and-producers', 'uri': 'amqp://296d03f3-539b-467c-afd6-f510a7528827:e5d03acnkou3l0tga785btnc4n@rabbitmq-sb.svc.asv.ice.gecis.io:5672/b4a6d819-60fc-400a-8586-243b24de0eba', 'type':      'varying', 'params':    [{'time-limit':     30, 'consumer-count': 0}], 'variables': [{'name':   'min-msg-size', 'values': [0, 1000, 10000, 100000]}, {'name':   'producer-count', 'values': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}]}, {'name':      'message-sizes-large', 'uri': 'amqp://296d03f3-539b-467c-afd6-f510a7528827:e5d03acnkou3l0tga785btnc4n@rabbitmq-sb.svc.asv.ice.gecis.io:5672/b4a6d819-60fc-400a-8586-243b24de0eba', 'type':      'varying', 'params':    [{'time-limit': 30}], 'variables': [{'name':   'min-msg-size', 'values': [5000, 10000, 50000, 100000, 500000, 1000000]}]}, {'name':      'rate-vs-latency', 'uri': 'amqp://296d03f3-539b-467c-afd6-f510a7528827:e5d03acnkou3l0tga785btnc4n@rabbitmq-sb.svc.asv.ice.gecis.io:5672/b4a6d819-60fc-400a-8586-243b24de0eba', 'type':      'rate-vs-latency', 'params':    [{'time-limit': 30}]}]");
+
+      //scenariosJSON = (List<Map>) new JSONReader().read("[{ 'name': 'consume', 'type': 'simple', 'uri': 'amqp://296d03f3-539b-467c-afd6-f510a7528827:e5d03acnkou3l0tga785btnc4n@rabbitmq-sb.svc.asv.ice.gecis.io:5672/b4a6d819-60fc-400a-8586-243b24de0eba', 'params': [{ 'time-limit': 10, 'producer-count': 4, 'consumer-count': 2, 'queue-name': 'queue_name2' }] }]");
     } catch (Exception e) {
       System.out.println("json is invalid");
       System.exit(1);
@@ -60,9 +63,7 @@ public class FormController {
       System.exit(1);
     }
 
-    Gson gson = new Gson();
-    returnResult = gson.toJson(results);
-    return new PerfResult(returnResult);
+    return new PerfResult(results);
   }
 
   private static void runStaticBrokerTests(Scenario[] scenarios) throws Exception {

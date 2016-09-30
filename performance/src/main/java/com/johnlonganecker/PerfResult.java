@@ -1,14 +1,17 @@
 package com.johnlonganecker;
 
+import java.util.Map;
+import java.util.HashMap;
+
 public class PerfResult {
   
-  private final String content;
+  private Map<String, Object> results = new HashMap<String, Object>();
 
-  public PerfResult(String content) {
-    this.content = content;
+  public PerfResult(Map<String, Object> results) {
+    this.results = results;
   }
 
-  public String getContent() {
-    return content;
+  public Map<String, Object> getResults() {
+    return results;
   }
 }
