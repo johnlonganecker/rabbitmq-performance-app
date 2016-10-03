@@ -1,0 +1,7 @@
+--- 
+applications: 
+- name: rabbitmq-perf-test-app
+  memory: 512M
+  instances: 1
+  random-route: true
+  path: target/performance-1.0-SNAPSHOT.jar
