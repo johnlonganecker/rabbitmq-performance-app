@@ -4,4 +4,5 @@ applications:
   memory: 512M
   instances: 1
   random-route: true
+  buildpack: java-buildpack
   path: target/performance-1.0-SNAPSHOT.jar

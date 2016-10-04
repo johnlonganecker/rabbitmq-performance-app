@@ -9,7 +9,7 @@ import com.rabbitmq.perf.Scenario;
 import com.rabbitmq.perf.ScenarioFactory;
 
 import org.springframework.stereotype.Controller;
-//import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 //import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +29,11 @@ public class FormController {
   private static final ConnectionFactory factory = new ConnectionFactory();
 
   private static final Map<String, Object> results = new HashMap<String, Object>();
+
+  @RequestMapping("/")
+  public String index() {
+    return "index.html";
+  }
 
   @PostMapping("/perftest")
   public @ResponseBody PerfResult process(@RequestBody String scenarioConfig) {
