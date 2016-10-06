@@ -1,10 +1,17 @@
-function render_graphs(results) {
-    $('.chart, .small-chart').map(function() {
+function render_graphs(results, chart) {
+    if(typeof chart === "undefined") {
+      $('.chart, .small-chart').map(function() {
+          plot($(this), results);
+      });
+      $('.summary').map(function() {
+          summarise($(this), results);
+      });
+    }
+    else {
+      chart.map(function() {
         plot($(this), results);
-    });
-    $('.summary').map(function() {
-        summarise($(this), results);
-    });
+      });
+    }
 }
 
 function summarise(div, results) {
