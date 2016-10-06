@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Arrays;
 
+import com.google.gson.Gson;
+
 @Controller
 //@RequestMapping("/perf")
 public class FormController {
@@ -32,20 +34,27 @@ public class FormController {
 
   @RequestMapping("/")
   public String index() {
+
     return "index.html";
   }
 
   @PostMapping("/perftest")
   public @ResponseBody PerfResult process(@RequestBody String scenarioConfig) {
 
+    Map<String, String> env = System.getenv();
+
+    HashMap<String, Object> vcap = null;
+    //vcap = (HashMap<String, Object>) new JSONReader().read(env.get("VCAP_SERVICES"));
+
+      //["VCAP_SERVICES"]["rabbitmq-36"][0]["credentials"]["uri"]
+
+    Gson gson = new Gson();
+    Rabbitmq36 rabbitmqConfig = gson.fromJson(env.get("VCAP_SERVICES"), Rabbitmq36.class);
+
     List<Map> scenariosJSON = null;
     String returnResult = "";
     try {
-      System.out.println(scenarioConfig);
       scenariosJSON = (List<Map>) new JSONReader().read(scenarioConfig);
-      //scenariosJSON = (List<Map>) new JSONReader().read("[ {'name':      'no-ack', 'uri': 'amqp://296d03f3-539b-467c-afd6-f510a7528827:e5d03acnkou3l0tga785btnc4n@rabbitmq-sb.svc.asv.ice.gecis.io:5672/b4a6d819-60fc-400a-8586-243b24de0eba', 'type':      'simple', 'params':    [{'time-limit':     30}]}, {'name':      'message-sizes-and-producers', 'uri': 'amqp://296d03f3-539b-467c-afd6-f510a7528827:e5d03acnkou3l0tga785btnc4n@rabbitmq-sb.svc.asv.ice.gecis.io:5672/b4a6d819-60fc-400a-8586-243b24de0eba', 'type':      'varying', 'params':    [{'time-limit':     30, 'consumer-count': 0}], 'variables': [{'name':   'min-msg-size', 'values': [0, 1000, 10000, 100000]}, {'name':   'producer-count', 'values': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}]}, {'name':      'message-sizes-large', 'uri': 'amqp://296d03f3-539b-467c-afd6-f510a7528827:e5d03acnkou3l0tga785btnc4n@rabbitmq-sb.svc.asv.ice.gecis.io:5672/b4a6d819-60fc-400a-8586-243b24de0eba', 'type':      'varying', 'params':    [{'time-limit': 30}], 'variables': [{'name':   'min-msg-size', 'values': [5000, 10000, 50000, 100000, 500000, 1000000]}]}, {'name':      'rate-vs-latency', 'uri': 'amqp://296d03f3-539b-467c-afd6-f510a7528827:e5d03acnkou3l0tga785btnc4n@rabbitmq-sb.svc.asv.ice.gecis.io:5672/b4a6d819-60fc-400a-8586-243b24de0eba', 'type':      'rate-vs-latency', 'params':    [{'time-limit': 30}]}]");
-
-      //scenariosJSON = (List<Map>) new JSONReader().read("[{ 'name': 'consume', 'type': 'simple', 'uri': 'amqp://296d03f3-539b-467c-afd6-f510a7528827:e5d03acnkou3l0tga785btnc4n@rabbitmq-sb.svc.asv.ice.gecis.io:5672/b4a6d819-60fc-400a-8586-243b24de0eba', 'params': [{ 'time-limit': 10, 'producer-count': 4, 'consumer-count': 2, 'queue-name': 'queue_name2' }] }]");
     } catch (Exception e) {
       System.out.println("json is invalid");
       System.exit(1);
@@ -53,8 +62,13 @@ public class FormController {
 
     Scenario[] scenarios = new Scenario[scenariosJSON.size()];
     for (int i = 0; i < scenariosJSON.size(); i++) {
-      System.out.println(i);
+      System.out.println(i + " - " + scenariosJSON.get(i));
       scenarios[i] = ScenarioFactory.fromJSON(scenariosJSON.get(i), factory);
+    }
+
+    try {
+      factory.setUri(rabbitmqConfig.getRabbitmq36().get(0).getCredentials().getUri());
+    } catch(Exception e) {
     }
 
     try {
@@ -72,12 +86,10 @@ public class FormController {
   }
 
   private static void runStaticBrokerTests(Scenario[] scenarios) throws Exception {
-    System.out.println("runStaticBroker");
     runTests(scenarios);
   }
 
   private static void runTests(Scenario[] scenarios) throws Exception {
-    System.out.println("runTests");
     for (Scenario scenario : scenarios) {
       System.out.print("Running scenario '" + scenario.getName() + "'");
       scenario.run();
