@@ -14,11 +14,24 @@
       body {
         background: #f06d06;
       }
+      .row h1, .row h2, .row h3 {
+        color: #484848;
+      }
       .row {
         background: #ffffff;
         margin: 20px 0;
         padding: 10px;
         overflow: auto;
+        border-radius: 10px;
+      }
+      #addRow {
+        background: #a04700;
+        color: #ffffff;
+        width: 170px;
+        padding: 10px 0;
+        text-align: center;
+        border-radius: 10px;
+        cursor: pointer;
       }
       /*
       #main div {
@@ -82,10 +95,11 @@
   <button class="submitDraw">draw</button>
   </div>
   <div class="chartParent box">
-    <h3 class="heading"></h3>
+    <h2 class="heading">Graph</h2>
     </div></div>`);
 
           this.parent = this.ui.find('.chartParent');
+          this.heading = this.ui.find('.heading');
           // add click listeners
           this.ui.find('.submitScenario').click(function() {
 
@@ -124,7 +138,7 @@
         scenarioConfig: {},
         config: {},
         parent: {},
-        heading: $('<h3 class="heading"></h3>'),
+        heading: {},
         clear: function() {
           this.graph.html("");
           this.parent.html("");
@@ -183,11 +197,13 @@
       graph = newGraph();
       $('#main').append(graph.init());
 
-      graph2 = newGraph();
-      $('#main2').append(graph2.init());
-
-      graph3 = newGraph();
-      $('#main3').append(graph3.init());
+      $('#addRow').click(function() {
+        var graph = newGraph(),
+            container = $('<div class="row"></div>');
+        
+        container.append(graph.init());
+        container.insertBefore($(this))
+      });
 
     });
     </script>
@@ -195,7 +211,6 @@
     <body>
     <h1>RabbitMQ Performance Tests</h1>
     <div id="main" class="row"></div>
-    <div id="main2" class="row"></div>
-    <div id="main3" class="row"></div>
+    <div id="addRow"><h2>Add Row<h2></div>
 </body>
 </html>
