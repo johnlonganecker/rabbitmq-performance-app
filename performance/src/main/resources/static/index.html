@@ -13,13 +13,18 @@
     <style type="text/css">
       body {
         background: #f06d06;
+        padding: 0;
+      }
+      h1 {
+        margin: 0;
       }
       .row h1, .row h2, .row h3 {
         color: #484848;
+        margin: 0;
       }
       .row {
         background: #ffffff;
-        margin: 20px 0;
+        margin: 5px 0 10px 0;
         padding: 10px;
         overflow: auto;
         border-radius: 10px;
@@ -53,15 +58,15 @@
       }
       .configs, .chartParent {
         float: left;
-        height: 400px;
-        margin: 1%;
+        height: 330px;
+        margin: 5px
       }
       textarea {
         width: 100%;
-        height: 70%;
+        height: 80%;
       }
       .configs {
-        width: 25%;
+        width: 24%;
       }
       .chartParent {
         width: 42%;
@@ -126,7 +131,7 @@
         defaultScenarioConfig: `[{ 
 "name": "consume", 
 "type": "simple",
-"uri": "amqp://296d03f3-539b-467c-afd6-f510a7528827:e5d03acnkou3l0tga785btnc4n@rabbitmq-sb.svc.asv.ice.gecis.io:5672/b4a6d819-60fc-400a-8586-243b24de0eba",
+"uri": "amqp://<user>:<password>@<host>:<port>/<host>",
 "params": [{
   "time-limit": 10,
   "producer-count": 4, 
@@ -136,6 +141,7 @@
 }]`,
         scenarioResults: {},
         scenarioConfig: {},
+        api: "/perftest",
         config: {},
         parent: {},
         heading: {},
@@ -176,7 +182,7 @@
           var that = this;
 
           $.ajax({
-              url: '/perftest',
+              url: that.api,
               type: 'POST',
               data: JSON.stringify(that.scenarioConfig),
               dataType: "json",
