@@ -60,7 +60,7 @@
       }
       .configs, .chartParent {
         float: left;
-        height: 330px;
+        height: 355px;
         margin: 5px;
       }
       .scenarioConfig, .graphConfig {
@@ -136,17 +136,16 @@
   {"data-y-axis":"rate (msg/s)"},
   {"data-y-axis2":"latency (μs)"}
 ]`,
-        defaultScenarioConfig: `[{ 
+        defaultScenarioConfig: `{ 
   "name": "consume", 
   "type": "simple",
-  "uri": "amqp://user:password@host:port/vhost",
   "params": [{
     "time-limit": 10,
     "producer-count": 4, 
     "consumer-count": 2, 
     "queue-name": "queue_name2" 
   }] 
-}]`,
+}`,
         scenarioResults: {},
         scenarioConfig: {},
         api: "/perftest",
@@ -162,7 +161,7 @@
           var graph = this.graph,
             heading = this.heading,
             parent = this.parent,
-            name = this.scenarioConfig[0].name;
+            name = this.scenarioConfig.name;
 
           this.clear();
 
@@ -179,6 +178,11 @@
           // add graph div
           parent.append(graph);
           render_graphs(this.results, graph);
+        },
+        drawError: function(message) {
+          this.clear();
+          this.parent
+                  .append(this.heading.html(message));
         },
         drawLoading: function() {
           // add loading animation
@@ -199,7 +203,14 @@
                   that.results = data.results;
                   that.draw();
               },
-              fail: function() { alert('error loading performance tests'); }
+              error: function(jqXHR, status, errorThrown) { 
+                try {
+                  that.drawError(JSON.parse(jqXHR.responseText).message);
+                }
+                finally {
+                  that.drawError(jqXHR.responsetext);
+                }
+              }
           });
         }
       };

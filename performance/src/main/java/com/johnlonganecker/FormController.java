@@ -9,13 +9,18 @@ import com.rabbitmq.perf.Scenario;
 import com.rabbitmq.perf.ScenarioFactory;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
-//import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.http.HttpStatus;
+
+import org.springframework.web.util.UriUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +29,7 @@ import java.util.Arrays;
 
 import com.google.gson.Gson;
 
-@Controller
+@RestController
 //@RequestMapping("/perf")
 public class FormController {
 
@@ -43,43 +48,39 @@ public class FormController {
 
     Map<String, String> env = System.getenv();
 
-    HashMap<String, Object> vcap = null;
-    //vcap = (HashMap<String, Object>) new JSONReader().read(env.get("VCAP_SERVICES"));
+    Map scenarioJSON = null;
 
-      //["VCAP_SERVICES"]["rabbitmq-36"][0]["credentials"]["uri"]
-
-    Gson gson = new Gson();
-    Rabbitmq36 rabbitmqConfig = gson.fromJson(env.get("VCAP_SERVICES"), Rabbitmq36.class);
-
-    List<Map> scenariosJSON = null;
     String returnResult = "";
     try {
-      scenariosJSON = (List<Map>) new JSONReader().read(scenarioConfig);
-    } catch (Exception e) {
-      System.out.println("json is invalid");
-      System.exit(1);
-    }
+      scenarioJSON = (Map) new JSONReader().read(scenarioConfig);
 
-    Scenario[] scenarios = new Scenario[scenariosJSON.size()];
-    for (int i = 0; i < scenariosJSON.size(); i++) {
-      System.out.println(i + " - " + scenariosJSON.get(i));
-      scenarios[i] = ScenarioFactory.fromJSON(scenariosJSON.get(i), factory);
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw new InvalidJsonException("Parsing ScenarioConfig JSON - " + e.getMessage());
     }
 
     try {
-      factory.setUri(rabbitmqConfig.getRabbitmq36().get(0).getCredentials().getUri());
+
+      // if uri is not specified use vcap variable
+      if (!scenarioJSON.containsKey("uri")) {
+        Gson gson = new Gson();
+        Rabbitmq36 rabbitmqConfig = gson.fromJson(env.get("VCAP_SERVICES"), Rabbitmq36.class);
+
+        scenarioJSON.put("uri", rabbitmqConfig.getRabbitmq36().get(0).getCredentials().getUri());
+      }
     } catch(Exception e) {
+      System.out.println("warning: failed trying to use Cloud Foundry VCAP ENV Variables");
+      e.printStackTrace();
     }
+
+    Scenario[] scenarios = new Scenario[1];
+    scenarios[0] = ScenarioFactory.fromJSON(scenarioJSON, factory);
 
     try {
       runStaticBrokerTests(scenarios);
     } catch(Exception e) {
-      System.out.println("Failed to run performance test");
-      System.out.println(e.getMessage());
-      System.out.println(e);
-      System.out.println(e.getCause());
-      System.out.println(Arrays.toString(e.getStackTrace()));
-      System.exit(1);
+      e.printStackTrace();
+      throw new RunScenarioException("Unable to run scenario - " + e.getMessage());
     }
 
     return new PerfResult(results);
@@ -93,8 +94,21 @@ public class FormController {
     for (Scenario scenario : scenarios) {
       System.out.print("Running scenario '" + scenario.getName() + "'");
       scenario.run();
-      System.out.println();
       results.put(scenario.getName(), scenario.getStats().results());
     }
+  }
+}
+
+@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+class InvalidJsonException extends RuntimeException {
+  public InvalidJsonException(String error) {
+    super(error);
+  }
+}
+
+@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+class RunScenarioException extends RuntimeException {
+  public RunScenarioException(String error) {
+    super(error);
   }
 }
