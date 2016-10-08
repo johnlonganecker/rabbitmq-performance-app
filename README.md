@@ -9,7 +9,7 @@ This project uses the [RabbitMQ Performance Testing Tool]( https://github.com/ra
 ## Run the Web App Server
 
 ### Command Line
-**Download rmq-perf-app.jar Release**
+**Download latest [release](https://github.com/johnlonganecker/rabbitmq-performance-app/releases) **
 ```
 java --jar rmq-perf-app.jar
 ```
@@ -22,7 +22,7 @@ cf restage rabbitmq-perf-app
 ```
 
 ## Releases
-Download from the github releases page
+Download from the [releases page](https://github.com/johnlonganecker/rabbitmq-performance-app/releases)
 
 ## Compile and Package
 **Have Maven and Java Installed**
