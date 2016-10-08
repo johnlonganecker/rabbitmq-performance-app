@@ -1,6 +1,6 @@
 --- 
 applications: 
-- name: rabbitmq-perf-test-app
+- name: rabbitmq-perf-app
   memory: 512M
   instances: 1
   random-route: true
