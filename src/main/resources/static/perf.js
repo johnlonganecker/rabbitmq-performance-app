@@ -1,17 +1,20 @@
-function render_graphs(results, chart) {
-    if(typeof chart === "undefined") {
-      $('.chart, .small-chart').map(function() {
-          plot($(this), results);
-      });
-      $('.summary').map(function() {
-          summarise($(this), results);
-      });
-    }
-    else {
-      chart.map(function() {
+function render_graphs(results, parentDomElement) {
+  if(typeof parentDomElement === "undefined") {
+    $('.chart, .small-chart').map(function() {
         plot($(this), results);
-      });
-    }
+    });
+    $('.summary').map(function() {
+        summarise($(this), results);
+    });
+  }
+  else {
+    parentDomElement.find('.chart, .small-chart').map(function() {
+        plot($(this), results);
+    });
+    parentDomElement.find('.summary').map(function() {
+        summarise($(this), results);
+    });
+  }
 }
 
 function summarise(div, results) {
