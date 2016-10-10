@@ -37,12 +37,6 @@ public class FormController {
 
   private static final Map<String, Object> results = new HashMap<String, Object>();
 
-  @RequestMapping("/")
-  public String index() {
-
-    return "index.html";
-  }
-
   @PostMapping("/perftest")
   public @ResponseBody PerfResult process(@RequestBody String scenarioConfig) {
 

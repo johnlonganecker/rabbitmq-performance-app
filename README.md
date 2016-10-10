@@ -32,7 +32,7 @@ mvn package
 ```
 
 ## How to Use
-You can find the WebApp at `<host>:8080/index.html`
+You can find the WebApp at `<host>:8080`
 
 Enter a performance `Scenario config` and how you want to graph it by setting the `Graph Config` 
 
@@ -66,7 +66,6 @@ Feel free to do something cool or grab something from the Todo list and just sub
   - web app
   - spring server
 - use better syntax highlight or fix syntax highlighter on keypress
-- redirect / to index.html
 - Better Errors
   - UI Display
   - Messages from server
