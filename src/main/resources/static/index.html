@@ -117,7 +117,12 @@
           this.ui.find('.submitScenario').click(function() {
 
             // get the latest scenario configs
-            that.scenarioConfig = JSON.parse(that.ui.find('.scenarioConfig').text());
+            try {
+              that.scenarioConfig = JSON.parse(that.ui.find('.scenarioConfig').text());
+            }
+            finally {
+              that.drawError("Error while parsing scenario config");
+            } 
            
             that.drawLoading();
             that.runScenario();
@@ -165,7 +170,12 @@
 
           this.clear();
 
-          this.config = JSON.parse(this.ui.find('.graphConfig').text());
+          try {
+            this.config = JSON.parse(this.ui.find('.graphConfig').text());
+          }
+          finally {
+            this.drawError("Error while parsing graph config");
+          } 
           // write graph heading
           parent.append(heading.html(name));
 
