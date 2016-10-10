@@ -64,7 +64,6 @@ public class FormController {
       }
     } catch(Exception e) {
       System.out.println("warning: failed trying to use Cloud Foundry VCAP ENV Variables");
-      e.printStackTrace();
     }
 
     Scenario[] scenarios = new Scenario[1];
