@@ -126,23 +126,19 @@
           });
           return this.ui;
         },
-        graph: $('<div class="chart"></div>'),
-        defaultConfig: `[
-  {"data-type":"time"},
-  {"data-latency":"true"},
-  {"data-x-axis":"time (s)"},
-  {"data-y-axis":"rate (msg/s)"},
-  {"data-y-axis2":"latency (μs)"}
-]`,
-        defaultScenarioConfig: `{ 
-  "name": "consume", 
-  "type": "simple",
-  "params": [{
-    "time-limit": 10,
-    "producer-count": 4, 
-    "consumer-count": 2, 
-    "queue-name": "queue_name2" 
-  }] 
+        graph: $('<div></div>'),
+        defaultConfig: `{
+  "type": "small-chart",
+  "fields": {
+    "data-type":"time",
+    "data-x-axis":"time (s)",
+    "data-y-axis":""
+  }
+}`,
+        defaultScenarioConfig: `{
+  "name":      "no-ack",
+  "type":      "simple",
+  "params":    [{"time-limit":     10}]
 }`,
         scenarioResults: {},
         scenarioConfig: {},
@@ -177,7 +173,7 @@
           // set the name
           graph.attr("data-scenario", name);
           Object.keys(this.config.fields).forEach(function(key) {
-            graph.attr(key, that.config.fields[key]);
+            graph.attr(key, that.config.fields[key]); 
           });
 
           graph.attr("class", this.config.type);
