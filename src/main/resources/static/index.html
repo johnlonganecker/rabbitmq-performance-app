@@ -5,12 +5,14 @@
     <title>RabbitMQ Performance</title>
     <link href="perf.css" rel="stylesheet" type="text/css">
     <link href="loading-animation.css" rel="stylesheet" type="text/css">
-    <link href="lib/highlight/styles/atom-one-dark.css" rel="stylesheet" type="text/css">
+    <link href="lib/prism-okaidia.css" rel="stylesheet" type="text/css">
+    <link href="lib/codeflask.css" rel="stylesheet" type="text/css">
     <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="lib/excanvas.min.js"></script><![endif]-->
     <script language="javascript" type="text/javascript" src="lib/jquery-3.1.1.min.js"></script>
     <script language="javascript" type="text/javascript" src="lib/jquery.flot.min.js"></script>
-    <script src="lib/highlight/highlight.pack.js"></script>
     <script language="javascript" type="text/javascript" src="perf.js"></script>
+    <script src="lib/prism.js"></script>
+    <script src="lib/codeflask.js"></script>
 
     <style type="text/css">
       body {
@@ -66,6 +68,10 @@
       .scenarioConfig, .graphConfig {
         border-radius: 10px;
         height: 250px;
+        background: #272822;
+      }
+      .scenarioConfig textarea, .graphConfig textarea{
+        color: #fff;
       }
       .configs {
         width: 24%;
@@ -73,12 +79,6 @@
       .chartParent {
         width: 42%;
         min-width: 650px;
-      }
-
-      .hljs {
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-        white-space: pre-wrap;
       }
     </style>
     <script language="javascript" type="text/javascript">
@@ -98,13 +98,13 @@
           var that = this;
           this.ui = $(`<div><div class="configs">
     <h2>Scenario Config</h2>
-    <pre><code class="json scenarioConfig" contenteditable="true">${this.defaultScenarioConfig}</code></pre>
+    <div class="scenarioConfig" >${this.defaultScenarioConfig}</div>
   <button class="submitScenario">submit</button>
   </div>
 
   <div class="configs">
     <h2>Graph Config</h2>
-    <pre><code class="json graphConfig" contenteditable="true">${this.defaultConfig}</code></pre>
+    <div class="graphConfig">${this.defaultConfig}</div>
   <button class="submitDraw">draw</button>
   </div>
   <div class="chartParent box">
@@ -231,8 +231,9 @@
 
       graph = newGraph();
       $('#main').append(graph.init())
-                .find('pre code').each(function(i, block) {
-                  hljs.highlightBlock(block);
+                .find('.scenarioConfig,.graphConfig').each(function(i, block) {
+                  var flask = new CodeFlask;
+                  flask.scaffold(block, false, {language: "javascript"});
                 });
 
       $('#addRow').click(function() {
@@ -242,7 +243,8 @@
         container.append(graph.init());
 
         container.find('pre code').each(function(i, block) {
-          hljs.highlightBlock(block);
+          var flask = new CodeFlask;
+          flask.scaffold(block, false, {language: "javascript"});
         });
 
         container.insertBefore($(this))

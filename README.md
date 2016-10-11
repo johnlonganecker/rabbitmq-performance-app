@@ -65,7 +65,6 @@ Feel free to do something cool or grab something from the Todo list and just sub
 - unit/smoke/integration tests
   - web app
   - spring server
-- use better syntax highlight or fix syntax highlighter on keypress
 - Better Errors
   - UI Display
   - Messages from server
