@@ -66,6 +66,13 @@
         width: 42%;
         min-width: 650px;
       }
+
+      /* fix word wrap on config text areas */
+      .scenarioConfig textarea, .graphConfig textarea, .scenarioConfig code, .graphConfig code {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: pre-wrap;
+      }
     </style>
     <script language="javascript" type="text/javascript">
 
@@ -145,11 +152,13 @@
         heading: {},
         clear: function() {
           this.graph.html("");
+          this.graph.removeAttr("class");
           this.parent.html("");
         },
         draw: function() {
 
-          var graph = this.graph,
+          var that = this,
+            graph = this.graph,
             heading = this.heading,
             parent = this.parent,
             name = this.scenarioConfig.name;
@@ -167,9 +176,11 @@
 
           // set the name
           graph.attr("data-scenario", name);
-          this.config.forEach(function(config) {
-            graph.attr(Object.keys(config)[0], config[Object.keys(config)[0]]); 
+          Object.keys(this.config.fields).forEach(function(key) {
+            graph.attr(key, that.config.fields[key]);
           });
+
+          graph.attr("class", this.config.type);
 
           // add graph div
           parent.append(graph);
