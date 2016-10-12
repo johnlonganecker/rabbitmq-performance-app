@@ -52,6 +52,116 @@ Enter a performance `Scenario config` and how you want to graph it by setting th
 
 You can find the documentation for both scenarios and graphs from [this repo](https://github.com/rabbitmq/rabbitmq-perf-test/blob/aeead278089125753268fc61ab91caa155220459/html/README.md)
 
+### Example Configs
+** Scenario **
+```
+{
+  "name":      "no-ack",
+  "type":      "simple",
+  "params":    [{"time-limit":     10}]
+}
+```
+** Graph **
+```
+{
+  "type": "chart",
+  "fields": {
+    "data-type":"time",
+    "data-x-axis":"time (s)",
+  }
+}
+```
+```
+{
+  "type": "small-chart",
+  "fields": {
+    "data-type":"time",
+    "data-x-axis":"time (s)",
+  }
+}
+```
+```
+{
+  "type": "summary",
+  "fields": {}
+}
+```
+------
+** Scenario **
+```
+{
+  "name":      "message-sizes-and-producers",
+  "type":      "varying",
+  "params":    [{"time-limit":     30,
+                 "consumer-count": 0}],
+  "variables": [{"name":   "min-msg-size",
+                 "values": [0, 1000, 10000, 100000]},
+                {"name":   "producer-count",
+                 "values": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}]
+}
+```
+
+** Graph **
+```
+{
+  "type": "chart",
+  "fields": {
+    "data-type": "series",
+    "data-x-key":"producerCount",
+    "data-x-axis":"producers",
+    "data-y-axis":"rate (msg/s)",
+    "data-plot-key":"send-msg-rate",
+    "data-series-key":"minMsgSize"
+  }
+}
+```
+------
+**Scenario**
+```
+{
+  "name":      "message-sizes-large",
+  "type":      "varying",
+  "params":    [{"time-limit": 30}],
+  "variables": [{"name":   "min-msg-size",
+                 "values": [5000, 10000, 50000, 100000, 500000, 1000000]}]
+}
+```
+**Graph**
+```
+{
+  "type": "chart",
+  "fields": {
+    "data-type": "x-y",
+    "data-x-key":"minMsgSize",
+    "data-plot-keys":"send-msg-rate send-bytes-rate",
+    "data-x-axis":"message size (bytes)",
+    "data-y-axis":"rate (msg/s)",
+    "data-y-axis2":"rate (bytes/s)",
+    "data-legend":"ne"
+  }
+}
+```
+------
+**Scenario**
+```
+{
+  "name":      "rate-vs-latency",
+  "type":      "rate-vs-latency",
+  "params":    [{"time-limit": 30}]
+}
+```
+**Graph**
+```
+{
+  "type": "chart",
+  "fields": {
+    "data-type":"r-l",
+    "data-x-axis":"rate attempted (msg/s)",
+    "data-y-axis":"rate (msg/s)"
+  }
+}
+```
+
 ### Where do the host/user/pass/vhost get set?
 In the `scenario config` you can specify a `uri` like this:
 
