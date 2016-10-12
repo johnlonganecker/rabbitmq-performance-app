@@ -17,7 +17,7 @@ java --jar rmq-perf-app.jar
 ### Cloud Foundry
 ```
 cf push
-cf bind-service rabbitmq-perf-app
+cf bind-service rabbitmq-perf-app rmq-service
 cf restage rabbitmq-perf-app
 ```
 
@@ -31,8 +31,22 @@ mvn install
 mvn package
 ```
 
-## How to Use
-You can find the WebApp at `<host>:8080`
+## Take it out for a spin
+
+If you don't have a rabbitmq service running you can run one with docker
+```
+docker pull rabbitmq
+docker run -d -p 5672:5672 rabbitmq
+```
+
+Run the RabbitMQ Performance App
+```
+java -jar rmq-perf-app.jar
+```
+
+The server will use rabbitmq's default URI to connect to the docker container. If you need to set your own URI read below.
+
+You can find the WebApp at `localhost:8080`
 
 Enter a performance `Scenario config` and how you want to graph it by setting the `Graph Config` 
 
@@ -61,6 +75,8 @@ Feel free to do something cool or grab something from the Todo list and just sub
 
 ## ToDo
 - Make a bunch of useful examples
+  - when creating new row have dialog box with pre-made exampels
+  - examples endpoint (list examples for dialog box)
 - Make http server ports configurable through CLI
 - unit/smoke/integration tests
   - web app
@@ -71,3 +87,8 @@ Feel free to do something cool or grab something from the Todo list and just sub
 - Store results
   - export results
   - import results
+  - save results to PG/MySQL/other DB
+  - store info of system with results?
+    - number of nodes
+    - policy
+    - hostname (not full uri)
