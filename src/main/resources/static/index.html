@@ -43,6 +43,24 @@
         cursor: pointer;
       }
 
+      button:focus {
+        outline:0;
+      }
+      .submitScenario, .submitDraw {
+        background: #5399e8;
+        color: #ffffff;
+        padding: 10px 30px;
+        text-align: center;
+        border-radius: 10px;
+        cursor: pointer;
+        border-top: 0;
+        border-right: 1px solid #424e5c;
+        border-bottom: 1px solid #424e5c;
+        border-left: 1px;
+        margin: 10px 0;
+        font-size: 1.5em;
+      }
+
       .hide {
         display: none;
       }
@@ -92,13 +110,13 @@
           this.ui = $(`<div><div class="configs">
     <h2>Scenario Config</h2>
     <div class="scenarioConfig" >${this.defaultScenarioConfig}</div>
-  <button class="submitScenario">submit</button>
+  <button class="submitScenario">Submit</button>
   </div>
 
   <div class="configs">
     <h2>Graph Config</h2>
     <div class="graphConfig">${this.defaultConfig}</div>
-  <button class="submitDraw">draw</button>
+  <button class="submitDraw">Draw</button>
   </div>
   <div class="chartParent box">
     <h2 class="heading">Graph</h2>
