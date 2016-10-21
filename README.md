@@ -11,7 +11,7 @@ This project uses the [RabbitMQ Performance Testing Tool]( https://github.com/ra
 ### Command Line
 **Download latest [release](https://github.com/johnlonganecker/rabbitmq-performance-app/releases)**
 ```
-java --jar rmq-perf-app.jar
+java -jar rmq-perf-app.jar
 ```
 
 ### Cloud Foundry
