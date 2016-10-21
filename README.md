@@ -53,7 +53,7 @@ Enter a performance `Scenario config` and how you want to graph it by setting th
 You can find the documentation for both scenarios and graphs from [this repo](https://github.com/rabbitmq/rabbitmq-perf-test/blob/aeead278089125753268fc61ab91caa155220459/html/README.md)
 
 ### Example Configs
-** Scenario **
+**Scenario**
 ```
 {
   "name":      "no-ack",
@@ -61,7 +61,7 @@ You can find the documentation for both scenarios and graphs from [this repo](ht
   "params":    [{"time-limit":     10}]
 }
 ```
-** Graph **
+**Graph**
 ```
 {
   "type": "chart",
@@ -87,7 +87,7 @@ You can find the documentation for both scenarios and graphs from [this repo](ht
 }
 ```
 ------
-** Scenario **
+**Scenario**
 ```
 {
   "name":      "message-sizes-and-producers",
@@ -101,7 +101,7 @@ You can find the documentation for both scenarios and graphs from [this repo](ht
 }
 ```
 
-** Graph **
+**Graph**
 ```
 {
   "type": "chart",
