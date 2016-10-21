@@ -8,6 +8,12 @@ This project uses the [RabbitMQ Performance Testing Tool]( https://github.com/ra
 
 ## Run the Web App Server
 
+### Docker
+```
+docker pull johnlonganecker/rmq-perf-app
+docker run -p 8080:8080 johnlonganecker/rmq-perf-app
+```
+
 ### Command Line
 **Download latest [release](https://github.com/johnlonganecker/rabbitmq-performance-app/releases)**
 ```
