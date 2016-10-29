@@ -15,6 +15,18 @@
     <script src="lib/codeflask.js"></script>
 
     <style type="text/css">
+      @keyframes animate-the-rabbit {
+        0% {
+          transform: translate(200%, 110%);
+        }
+        50% {
+          transform: translate(200%, 35%);
+        }
+        100% {
+          transform: translate(200%, 110%);
+        }
+      }
+
       body {
         background: #f06d06;
         padding: 0;
@@ -91,16 +103,29 @@
         overflow-wrap: break-word;
         white-space: pre-wrap;
       }
+      #rabbit {
+        transform-origin: center center;
+        animation-name: animate-the-rabbit;
+        animation-duration: 1.5s;
+        animation-delay: 0;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+        animation-timing-function: ease-in-out;
+        animation-fill-mode: forwards;
+        width: 125px;
+        height: 125px;
+      }
     </style>
     <script language="javascript" type="text/javascript">
 
     var loadingTemplate = `
-        <div class="sk-folding-cube">
-             <div class="sk-cube1 sk-cube"></div>
-             <div class="sk-cube2 sk-cube"></div>
-             <div class="sk-cube4 sk-cube"></div>
-             <div class="sk-cube3 sk-cube"></div>
-           </div>`;
+      <div id="rabbit">
+        <svg viewBox="0 0 507 508.375" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid">
+            <g>
+                <path d="M7,493V22S9.383,11.77,13.939,8.413C18.869,4.781,28,4,28,4H92s8.189,3.416,11.522,6.988C107.174,14.9,109,23,109,23V191s1.612,6.612,5.291,10.291C118.11,205.11,124,206,124,206l70,1a37.292,37.292,0,0,0,10.545-5.424C208.856,198.223,210,190,210,190V22s1.41-8.92,5.864-12.879C220.409,5.081,228,4,228,4h67s9.409,3.139,12.862,7.333C311.408,15.638,312,22,312,22V190s1.663,6.448,5.242,10.794C320.659,204.944,328,207,328,207H494s9.72,1.248,14.574,5.616C513.712,217.24,514,225,514,225V492s0.021,12.447-4.086,17.038C505.53,513.937,490,512,490,512H23s-6.98-1.041-10.84-5.93C8.527,501.467,7,493,7,493ZM313,330v56s1.011,8.512,6.016,14.018S333,409,333,409h55s10.352-3.088,16.521-9c5.821-5.579,6.479-14,6.479-14V330s0.136-3.806-5.706-10.22S390,310,390,310H334s-9.678,2.678-14.509,7.509C314.333,322.667,313,330,313,330Z"  style="fill: #f57b20; fill-rule: evenodd;" />
+            </g>
+        </svg>
+      </div>`;
 
     var newGraph = function(parent, scenarioConfig) {
       return {
