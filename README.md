@@ -22,6 +22,7 @@ java -jar rmq-perf-app.jar
 
 ### Cloud Foundry
 ```
+mvn install
 cf push
 cf bind-service rabbitmq-perf-app rmq-service
 cf restage rabbitmq-perf-app
