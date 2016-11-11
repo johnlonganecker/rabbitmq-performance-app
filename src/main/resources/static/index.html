@@ -277,13 +277,13 @@
             container = $('<div class="row"></div>');
         
         container.append(graph.init());
+        container.insertBefore($(this));
 
-        container.find('pre code').each(function(i, block) {
+        container.find('.scenarioConfig,.graphConfig').each(function(i, block) {
           var flask = new CodeFlask;
           flask.scaffold(block, false, {language: "javascript"});
         });
 
-        container.insertBefore($(this))
       });
 
     });
